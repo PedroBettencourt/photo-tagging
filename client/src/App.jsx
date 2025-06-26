@@ -58,29 +58,25 @@ function Characters({ characters }) {
 
 function App() {
 
-    const dimensions = { width: 1280, height: 906 };
-    // const [dimensions, setDimensions] = useState(null);
-    const [click, setClick] = useState(false);
+    const dimensions = { width: 1280, height: 906 }; // Image dimensions
+    const [click, setClick] = useState(false); // For menu to be visible or not
     const [coords, setCoords] = useState(null);
     const [characters, setCharacters] = useState(
         [ { name: "man", image: man, clicked: false }, 
           { name: "bears", image: bears, clicked: false }, 
           { name: "devil", image: devil, clicked: true }]
         );
-    const [chosen, setChosen] = useState(null);
-    const [error, setError] = useState(null);
-
-    // function handleLoad(e) {
-    //     const {width, height} = (e.nativeEvent.srcElement);
-    //     setDimensions({ width: width, height: height });
-    // }
+    const [chosen, setChosen] = useState(null); // After choosing a position and character
 
     function handleClick(e) {
         if (!click) {
             const rect = e.target.getBoundingClientRect();
             const x = e.clientX - rect.left;
             const y = e.clientY - rect.top;
+
+            // Both coords inside the image (the ones sent to the backend) and page (for positioning dot and menu)
             setCoords({ x: e.pageX, y: e.pageY, imageX: x, imageY: y });
+
             setClick(true);
         } else setClick(false);
     };
@@ -96,16 +92,17 @@ function App() {
                         body: JSON.stringify({ name: chosen, x: coords.imageX, y: coords.imageY })
                     });
                 const json = await res.json();
-                console.log(json);
                 if (json) {
-                    const updatedCharacters = characters.map(chr => chr.name === chosen ? chr.clicked = true : null)
+                    const updatedCharacters = characters.map(chr => {
+                        chr.name === chosen ? chr.clicked = true : false;
+                        return chr;
+                    });
                     setCharacters(updatedCharacters);
                 }
                 setChosen(null);
 
             } catch(err) {
                 console.log(err);
-                setError(err);
             }
         };
 
