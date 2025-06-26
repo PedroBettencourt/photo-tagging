@@ -7,14 +7,14 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
 const characterPositions = {
-    cat: { x: [300, 400], y: [100, 200] }
+    man: { x: [300, 400], y: [100, 200] }
 };
 
-app.get("/", (req, res) => {
-    const characterUser = req.body.character;
-    const xUser = req.body.xUser;
-    const yUser = req.body.yUser;
-
+app.post("/", (req, res) => {
+    const characterUser = req.body.name;
+    const xUser = req.body.x;
+    const yUser = req.body.y;
+    
     const {x, y} = characterPositions[characterUser];
     
     let result = false;
