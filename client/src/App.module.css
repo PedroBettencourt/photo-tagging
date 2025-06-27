@@ -102,3 +102,18 @@
     background-color: red;
     border-radius: 50%;
 }
+
+.finishClass {
+    left: calc(50% - 200px);
+    top: calc(50% - 150px);
+    border: 1px solid red;
+    position: absolute;
+    padding: 100px 150px;
+    background-color: black;
+    font-weight: bold;
+    font-size: 2em;
+}
+
+.obscurity :not(.finishClass) {
+    opacity: 0.5;
+}

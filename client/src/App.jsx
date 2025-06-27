@@ -3,7 +3,7 @@ import painting from "./assets/painting.jpg"
 import man from "./assets/man.jpg";
 import bears from "./assets/bears.jpg";
 import devil from "./assets/devil.jpg";
-import { fullImage, dot, menu, characterImgs, clickedClass, answerClass } from "./App.module.css";
+import { fullImage, dot, menu, characterImgs, clickedClass, answerClass, finishClass, obscurity } from "./App.module.css";
 
 function Click({ dimensions, coords, characters, setClick, setChosen }) {
 
@@ -29,21 +29,19 @@ function Click({ dimensions, coords, characters, setClick, setChosen }) {
         setChosen(name);
     }
 
+    const notChosenChracters = characters.filter(chr => chr.clicked === false);
+
     return (
         <>
           <div id="dot" className={dot} style={{ left: x, top: y }}></div>
           <ul id="box" className={menu} style={{ left: x_menu, top: y_menu }}>
-              { characters.map(chr => (
-                    <>
-                        {!chr.clicked &&
-                            <li key={chr.name}>
-                                <button onClick={() => handleClick(chr.name)}>
-                                    <img src={chr.image}></img>
-                                    { chr.name }
-                                </button>
-                            </li>
-                        }
-                    </>        
+              { notChosenChracters.map(chr => (
+                <li key={chr.name}>
+                    <button onClick={() => handleClick(chr.name)}>
+                        <img src={chr.image}></img>
+                        { chr.name }
+                    </button>
+                </li>
               ))}
           </ul>
         </>
@@ -121,9 +119,14 @@ function App() {
 
     }, [chosen]);
 
+    let content = null;
+    if (answers.length === 3) content = obscurity;
+
     return (
-        <>
-            { answers.length === 3 && <div>Finish!</div>}
+        <div className={ content }>
+            { answers.length === 3 && 
+                <div className={ finishClass }>Finish!</div>
+            }
             <Characters characters={characters} />
             <div className={fullImage} style={{ minWidth: dimensions.width }}>
                 <img onClick={ handleClick } src={ painting } alt="Netherlandish Proverbs painting"/> 
@@ -136,12 +139,12 @@ function App() {
                 </ul>
             }
             { click && <Click dimensions={dimensions} coords={coords} characters={characters} setClick={setClick} setChosen={setChosen} />}
-        </>
+        </div>
     );
 };
 
 export default App;
 
 
-// IT'S MISSING: FINISH, TIMER
+// IT'S MISSING: TIMER
 // MARKERS ARE INCORRECT IF ZOOM
