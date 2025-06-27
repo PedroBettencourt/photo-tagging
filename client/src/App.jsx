@@ -3,7 +3,7 @@ import painting from "./assets/painting.jpg"
 import man from "./assets/man.jpg";
 import bears from "./assets/bears.jpg";
 import devil from "./assets/devil.jpg";
-import { fullImage, dot, menu, characterImgs, clickedClass } from "./App.module.css";
+import { fullImage, dot, menu, characterImgs, clickedClass, answerClass } from "./App.module.css";
 
 function Click({ dimensions, coords, characters, setClick, setChosen }) {
 
@@ -34,7 +34,16 @@ function Click({ dimensions, coords, characters, setClick, setChosen }) {
           <div id="dot" className={dot} style={{ left: x, top: y }}></div>
           <ul id="box" className={menu} style={{ left: x_menu, top: y_menu }}>
               { characters.map(chr => (
-                <li key={chr.name}><button onClick={() => handleClick(chr.name)}> <img src={chr.image}></img> { chr.name } </button></li>
+                    <>
+                        {!chr.clicked &&
+                            <li key={chr.name}>
+                                <button onClick={() => handleClick(chr.name)}>
+                                    <img src={chr.image}></img>
+                                    { chr.name }
+                                </button>
+                            </li>
+                        }
+                    </>        
               ))}
           </ul>
         </>
@@ -64,9 +73,10 @@ function App() {
     const [characters, setCharacters] = useState(
         [ { name: "man", image: man, clicked: false }, 
           { name: "bears", image: bears, clicked: false }, 
-          { name: "devil", image: devil, clicked: true }]
+          { name: "devil", image: devil, clicked: false }]
         );
     const [chosen, setChosen] = useState(null); // After choosing a position and character
+    const [answers, setAnswers] = useState([]); // character positions after correctly guessing
 
     function handleClick(e) {
         if (!click) {
@@ -98,6 +108,7 @@ function App() {
                         return chr;
                     });
                     setCharacters(updatedCharacters);
+                    setAnswers([...answers, { name: chosen, x: coords.x, y: coords.y }]);
                 }
                 setChosen(null);
 
@@ -112,14 +123,25 @@ function App() {
 
     return (
         <>
+            { answers.length === 3 && <div>Finish!</div>}
             <Characters characters={characters} />
             <div className={fullImage} style={{ minWidth: dimensions.width }}>
                 <img onClick={ handleClick } src={ painting } alt="Netherlandish Proverbs painting"/> 
-                {/* {onLoad={handleLoad}} */}
             </div>
-            {click && <Click dimensions={dimensions} coords={coords} characters={characters} setClick={setClick} setChosen={setChosen} />}
+            { answers.length !== 0 && 
+                <ul className={ answerClass }>
+                    {answers.map(chr => (
+                        <li key={chr.character} style={{ left: chr.x, top: chr.y }}></li>
+                    ))}
+                </ul>
+            }
+            { click && <Click dimensions={dimensions} coords={coords} characters={characters} setClick={setClick} setChosen={setChosen} />}
         </>
     );
 };
 
 export default App;
+
+
+// IT'S MISSING: FINISH, TIMER
+// MARKERS ARE INCORRECT IF ZOOM

@@ -89,3 +89,16 @@
     text-decoration: line-through;
 }
 
+.answerClass {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.answerClass > li {
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    background-color: red;
+    border-radius: 50%;
+}
