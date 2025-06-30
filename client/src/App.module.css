@@ -104,16 +104,43 @@
 }
 
 .finishClass {
-    left: calc(50% - 200px);
-    top: calc(50% - 150px);
-    border: 1px solid red;
+    left: calc(50% - 250px);
+    top: calc(50% - 200px);
+    border-radius: 10px;
     position: absolute;
-    padding: 100px 150px;
+    padding: 50px 150px;
     background-color: black;
     font-weight: bold;
     font-size: 2em;
+    text-align: center;
+    z-index: 10;
 }
 
-.obscurity :not(.finishClass) {
+.obscurity {
     opacity: 0.5;
+}
+
+.timer {
+    text-align: right;
+    margin: 20px;
+}
+
+.score > div {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.score label {
+    font-size: 0.8em;
+}
+
+.score input {
+    height: 2em;
+}
+
+.score button {
+    height: 2em;
+    width: 4em;
+    font-size: 0.6em;
 }

@@ -3,7 +3,7 @@ import painting from "./assets/painting.jpg"
 import man from "./assets/man.jpg";
 import bears from "./assets/bears.jpg";
 import devil from "./assets/devil.jpg";
-import { fullImage, dot, menu, characterImgs, clickedClass, answerClass, finishClass, obscurity } from "./App.module.css";
+import { fullImage, dot, menu, characterImgs, clickedClass, answerClass, finishClass, obscurity, timer, score } from "./App.module.css";
 
 function Click({ dimensions, coords, characters, setClick, setChosen }) {
 
@@ -63,6 +63,72 @@ function Characters({ characters }) {
     )
 }
 
+function Score({ time }) {
+
+    const [name, setName] = useState("");
+    const [submit, setSubmit] = useState(false);
+    const [leaderboard, setLeaderboard] = useState(null);
+
+    function handleName(e) {
+        setName(e.target.value);
+    } 
+
+    function handleSubmit(e) {
+        e.preventDefault();
+        setSubmit(true);
+    }
+
+    useEffect(() => {
+        async function fetchData(){
+            try {
+                const res = await fetch(
+                    "http://localhost:3000/score",
+                    {
+                        headers: { "Content-Type": "application/json" },
+                        method: "POST",
+                        body: JSON.stringify({ name: name, time: time })
+                    });
+                const json = await res.json();
+                setLeaderboard(json);
+            } catch (err) {
+                console.log(err);
+            }
+        };
+
+        if (submit) {
+            
+            fetchData();
+            setSubmit(false);
+        }
+    }, [submit]);
+
+    return(
+        
+        <>
+            {!leaderboard &&
+                <form className={score} onSubmit={handleSubmit}>
+                    <div>
+                        <label htmlFor="name">Name</label>
+                        <input type="text" name="name" id="name" onChange={handleName} value={name} />
+                    </div>
+                    <button type="submit">Submit</button>
+                </form>
+            }
+            {leaderboard && 
+                <>
+                    <h2>Leaderboard</h2>
+                    <ol>
+                        {console.log(leaderboard)}
+                        {leaderboard.map(score => (
+                            <li>{score.name} {score.score/1000} s</li>
+                        ))}
+                    </ol>
+                </>
+            }
+        </>
+    )
+}
+
 function App() {
 
     const dimensions = { width: 1280, height: 906 }; // Image dimensions
@@ -75,6 +141,10 @@ function App() {
         );
     const [chosen, setChosen] = useState(null); // After choosing a position and character
     const [answers, setAnswers] = useState([]); // character positions after correctly guessing
+    const [timeStart, setTimeStart] = useState(Date.now());
+    const [timeNow, setTimeNow] = useState(Date.now());
+    const [timeEnd, setTimeEnd] = useState(null);
+    const [content, setContent] = useState(null); // Style class after game ending
 
     function handleClick(e) {
         if (!click) {
@@ -93,7 +163,7 @@ function App() {
         async function fetchData() {
             try {
                 const res = await fetch(
-                    "http://localhost:3000/",
+                    "http://localhost:3000/position",
                     {
                         headers: { "Content-Type": "application/json" },
                         method: "POST",
@@ -119,32 +189,47 @@ function App() {
 
     }, [chosen]);
 
-    let content = null;
-    if (answers.length === 3) content = obscurity;
+    useEffect(() => {
+        if (answers.length === 3) {
+            setContent(obscurity);
+            setTimeEnd(Date.now);
+        }
+    },[answers]);
+
+    useEffect(() => {
+        const interval = setInterval(() => setTimeNow(Date.now), 1000);
+        
+        if (timeEnd) clearInterval(interval);
+
+        return () => clearInterval(interval)
+    }, [timeEnd]);
 
     return (
-        <div className={ content }>
+        <>
             { answers.length === 3 && 
-                <div className={ finishClass }>Finish!</div>
+                <div className={ finishClass }>
+                    <p>Finished!</p>
+                    <p>{ Math.round((timeEnd - timeStart) / 1000) } s</p>
+                    <Score time={timeEnd - timeStart}/>
+                </div>
             }
             <Characters characters={characters} />
+
+            <div className={timer}>{Math.round((timeNow - timeStart) / 1000)} s</div> 
+
             <div className={fullImage} style={{ minWidth: dimensions.width }}>
-                <img onClick={ handleClick } src={ painting } alt="Netherlandish Proverbs painting"/> 
+                <img onClick={ handleClick } src={ painting } alt="Netherlandish Proverbs painting" className={content} /> 
             </div>
             { answers.length !== 0 && 
                 <ul className={ answerClass }>
                     {answers.map(chr => (
-                        <li key={chr.character} style={{ left: chr.x, top: chr.y }}></li>
+                        <li key={chr.name} style={{ left: chr.x, top: chr.y }}></li>
                     ))}
                 </ul>
             }
             { click && <Click dimensions={dimensions} coords={coords} characters={characters} setClick={setClick} setChosen={setChosen} />}
-        </div>
+        </>
     );
 };
 
 export default App;
-
-
-// IT'S MISSING: TIMER
-// MARKERS ARE INCORRECT IF ZOOM
