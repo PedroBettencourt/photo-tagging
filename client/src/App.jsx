@@ -4,6 +4,7 @@ import man from "./assets/man.jpg";
 import bears from "./assets/bears.jpg";
 import devil from "./assets/devil.jpg";
 import { fullImage, dot, menu, characterImgs, clickedClass, answerClass, finishClass, obscurity, timer, score } from "./App.module.css";
+import { Link } from "react-router";
 
 function Click({ dimensions, coords, characters, setClick, setChosen }) {
 
@@ -98,14 +99,13 @@ function Score({ time }) {
         if (submit) {
             
             fetchData();
-            setSubmit(false);
         }
     }, [submit]);
 
     return(
         
         <>
-            {!leaderboard &&
+            {!submit &&
                 <form className={score} onSubmit={handleSubmit}>
                     <div>
                         <label htmlFor="name">Name</label>
@@ -115,15 +115,7 @@ function Score({ time }) {
                 </form>
             }
             {leaderboard && 
-                <>
-                    <h2>Leaderboard</h2>
-                    <ol>
-                        {console.log(leaderboard)}
-                        {leaderboard.map(score => (
-                            <li>{score.name} {score.score/1000} s</li>
-                        ))}
-                    </ol>
-                </>
+                <Link to="/leaderboard">Leaderboard</Link>
             }
         </>
     )

@@ -64,6 +64,7 @@
 
 .characterImgs {
     list-style: none;
+    padding: 0;
     display: flex;
     justify-content: center;
     gap: 20px;    
@@ -104,8 +105,9 @@
 }
 
 .finishClass {
-    left: calc(50% - 250px);
-    top: calc(50% - 200px);
+    width: 10em;
+    left: 450px;
+    top: 100px;
     border-radius: 10px;
     position: absolute;
     padding: 50px 150px;
@@ -121,7 +123,7 @@
 }
 
 .timer {
-    text-align: right;
+    text-align: center;
     margin: 20px;
 }
 
@@ -129,6 +131,7 @@
     display: flex;
     gap: 10px;
     align-items: center;
+    justify-content: center;
 }
 
 .score label {

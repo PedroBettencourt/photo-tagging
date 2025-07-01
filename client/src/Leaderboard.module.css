@@ -1,0 +1,20 @@
+.leaderboardClass {
+    margin: 20px;
+}
+
+.leaderboardClass > ol {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.leaderboardClass li {
+    width: 200px;
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+}
+
+.leaderboardClass li:first-of-type {
+    font-weight: bold;
+    font-size: 1.3em;
+}

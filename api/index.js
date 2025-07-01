@@ -73,6 +73,14 @@ app.post("/score", validateScore, async (req, res) => {
 
     const leaderboard = await db.getLeaderboard();
     res.json(leaderboard);
-})
+});
+
+
+// Leaderboard
+
+app.get("/leaderboard", async (req, res) => {
+    const leaderboard = await db.getLeaderboard();
+    res.json(leaderboard);
+});
 
 app.listen(3000);
