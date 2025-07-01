@@ -1,12 +1,8 @@
-const express = require("express");
-const app = express();
-const cors = require('cors');
+
+const express = require('express');
 const { body, validationResult } = require("express-validator");
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(cors());
-
+const index = express.Router();
 
 // Character selection
 
@@ -26,7 +22,7 @@ const validatePosition = [
         .isNumeric().withMessage('Not a number'),
 ];
 
-app.post("/position", validatePosition, (req, res) => {
+index.post("/position", validatePosition, (req, res) => {
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -59,7 +55,7 @@ const validateScore = [
         .isNumeric().withMessage("Invalid time"),
 ];
 
-app.post("/score", validateScore, async (req, res) => {
+index.post("/score", validateScore, async (req, res) => {
 
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -78,9 +74,11 @@ app.post("/score", validateScore, async (req, res) => {
 
 // Leaderboard
 
-app.get("/leaderboard", async (req, res) => {
+index.get("/leaderboard", async (req, res) => {
     const leaderboard = await db.getLeaderboard();
     res.json(leaderboard);
 });
 
-app.listen(3000);
+
+// For testing
+module.exports = index;

@@ -31,7 +31,7 @@ function Leaderboard() {
                         <span>Score</span>
                     </li>
                     {leaderboard.map(score => (
-                        <li>
+                        <li key={score.id}>
                             <span>{score.name} </span>
                             <span>{score.score/1000} s</span>
                         </li>
