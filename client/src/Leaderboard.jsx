@@ -8,7 +8,7 @@ function Leaderboard() {
     useEffect(() => {
             async function fetchData(){
                 try {
-                    const res = await fetch(`${import.meta.env.URL}/leaderboard`)
+                    const res = await fetch(`https://proverb-clicker.onrender.com/leaderboard`)
                     const json = await res.json();
                     setLeaderboard(json);
                 } catch (err) {
