@@ -39,7 +39,7 @@ function Click({ dimensions, coords, characters, setClick, setChosen }) {
               { notChosenChracters.map(chr => (
                 <li key={chr.name}>
                     <button onClick={() => handleClick(chr.name)}>
-                        <img src={chr.image}></img>
+                        <img src={chr.image} alt={`${chr.name} menu`}></img>
                         { chr.name }
                     </button>
                 </li>
@@ -56,7 +56,7 @@ function Characters({ characters }) {
                 {characters.map(chr => (
                     <li key={chr.name} className={ chr.clicked ? clickedClass : null }> 
                         { chr.name } 
-                        <img src={chr.image}></img> 
+                        <img src={chr.image} alt={chr.name}></img> 
                     </li> 
                 ))}
             </ul>
@@ -215,7 +215,7 @@ function App() {
             { answers.length !== 0 && 
                 <ul className={ answerClass }>
                     {answers.map(chr => (
-                        <li key={chr.name} style={{ left: chr.x, top: chr.y }}></li>
+                        <li key={chr.name} style={{ left: chr.x, top: chr.y }} data-testId="answer"></li>
                     ))}
                 </ul>
             }
