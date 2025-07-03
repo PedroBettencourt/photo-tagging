@@ -83,7 +83,7 @@ function Score({ time }) {
         async function fetchData(){
             try {
                 const res = await fetch(
-                    `${import.meta.env.URL}/score`,
+                    `https://proverb-clicker.onrender.com/score`,
                     {
                         headers: { "Content-Type": "application/json" },
                         method: "POST",
@@ -155,7 +155,7 @@ function App() {
         async function fetchData() {
             try {
                 const res = await fetch(
-                    `${import.meta.env.URL}/position`,
+                    `https://proverb-clicker.onrender.com/position`,
                     {
                         headers: { "Content-Type": "application/json" },
                         method: "POST",
