@@ -5,6 +5,8 @@ import bears from "./assets/bears.jpg";
 import devil from "./assets/devil.jpg";
 import { fullImage, dot, menu, characterImgs, clickedClass, answerClass, finishClass, obscurity, timer, score } from "./App.module.css";
 import { Link } from "react-router";
+import dotenv from 'dotenv';
+dotenv.config();
 
 function Click({ dimensions, coords, characters, setClick, setChosen }) {
 
@@ -83,7 +85,7 @@ function Score({ time }) {
         async function fetchData(){
             try {
                 const res = await fetch(
-                    "http://localhost:3000/score",
+                    `${process.env.URL}/score`,
                     {
                         headers: { "Content-Type": "application/json" },
                         method: "POST",
@@ -155,7 +157,7 @@ function App() {
         async function fetchData() {
             try {
                 const res = await fetch(
-                    "http://localhost:3000/position",
+                    `${process.env.URL}/position`,
                     {
                         headers: { "Content-Type": "application/json" },
                         method: "POST",
