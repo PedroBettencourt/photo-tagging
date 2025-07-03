@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
 import { leaderboardClass } from "./Leaderboard.module.css";
-import dotenv from 'dotenv';
-dotenv.config();
 
 function Leaderboard() {
 
@@ -10,7 +8,7 @@ function Leaderboard() {
     useEffect(() => {
             async function fetchData(){
                 try {
-                    const res = await fetch(`${process.env.URL}/leaderboard`)
+                    const res = await fetch(`${import.meta.env.URL}/leaderboard`)
                     const json = await res.json();
                     setLeaderboard(json);
                 } catch (err) {
